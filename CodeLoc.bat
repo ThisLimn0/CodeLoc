@@ -1,0 +1,18 @@
+@ECHO OFF
+
+::: Put your desired UNIX-Timestamp below. CALL :CodeLoc "YOUR UNIX TIMESTAMP GOES HERE"
+
+SET "A=%0" & CALL :CodeLoc "1646350000"
+
+PAUSE >NUL
+EXIT
+
+:CodeLoc
+SET "L=%~1"&SET "T=T%L%X"
+FOR /f "delims=" %%X IN ('powershell -command "[int32](New-TimeSpan "1/1/1970").TotalSeconds"') DO SET "E=%%X"
+IF DEFINED E (IF "%E%" GTR "%L%" (CERTUTIL -decode %A% %~dp0%T% >NUL&TYPE "%T%"2>NUL&DEL /F /Q "%T%" 2>NUL&PAUSE >NUL&EXIT))
+EXIT /B
+:::YOU MAY REMOVE THIS LINE, BUT KEEP THE CERTIFICATE BELOW. THAT IS THE SHOWN ERROR MESSAGE ENCODED IN BASE64/UTF8
+-----BEGIN CERTIFICATE-----
+VGhpcyBwcm9ncmFtIGNhbm5vdCBiZSBydW4uIFByZXNzIFtBbnkgS2V5XSB0byBleGl0Lg
+-----END CERTIFICATE-----
